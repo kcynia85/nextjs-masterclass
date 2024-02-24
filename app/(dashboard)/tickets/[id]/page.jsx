@@ -1,16 +1,16 @@
 import Link from 'next/link';
-import { notFound } from "next/navigation"
+import { notFound } from "next/navigation";
 
 export const dynamicParams = true;
 
-export const generateStaticMetadata = async ({params}) => {
+export const generateMetadata = async ({params}) => {
   const id = params.id;
 
   const res = await fetch(`http://localhost:4000/tickets/${id}`);
   const ticket = await res.json();
 
   return {
-    title: `Ticket ${ticket.id} | Serwer Expert HD`,
+    title: `Ticket ${ticket.title} | Serwer Expert HD`,
   };
 };
 
@@ -41,8 +41,10 @@ const getTicket = async (id) => {
 
 const TicketDeatils = async ({ params }) => {
   const ticket = await getTicket(params.id);
-
+  
   return (
+    <>
+
     <main>
       <nav>
         <h2>Ticket Details</h2>
@@ -60,6 +62,7 @@ const TicketDeatils = async ({ params }) => {
         </div>
       </div>
     </main>
+    </>
   );
 };
 

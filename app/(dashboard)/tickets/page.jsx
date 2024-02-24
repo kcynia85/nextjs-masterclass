@@ -2,6 +2,10 @@ import React, { Suspense } from 'react'
 import TicketList from './TicketList'
 import Loading from './loading'
 
+export const metadata = {
+  title: 'Serwis Expert HD | Tickets'
+}
+
 const Tickets = () => {
   return (
     <main>
