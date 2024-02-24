@@ -43,9 +43,6 @@ const TicketDeatils = async ({ params }) => {
         {ticket.priority} priority
         </div>
         <div className="flex justify-center my-8">
-          <Link href={`/tickets/${ticket.id}/edit`}>
-            <button className="btn-primary">Edit Ticket</button>
-          </Link>
           <Link href="/tickets">
             <button className="btn-primary">Back to Tickets</button>
           </Link>
