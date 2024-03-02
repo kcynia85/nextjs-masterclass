@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const CreateTicketForm = () => {
+export const CreateTicketForm = () => {
   const router = useRouter()
 
   const [title, setTitle] = useState('')
@@ -70,5 +70,3 @@ const CreateTicketForm = () => {
     </form>
   )
 }
-
-export default CreateTicketForm;
