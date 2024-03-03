@@ -1,7 +1,8 @@
 "use client"
 import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
-const AuthForm = ({ handleSubmit }) => {
+const AuthForm = ({ handleSubmit, loggingIn }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -25,7 +26,9 @@ const AuthForm = ({ handleSubmit }) => {
           required 
         />
       </label>
-      <button className="btn-primary">Submit</button>
+      <button type="submit" className='btn-primary' disabled={loggingIn}>
+        {loggingIn ? <ClipLoader size={20} color="white" /> : "Log in"}
+      </button>
     </form>
   )
 }
