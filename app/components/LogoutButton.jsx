@@ -7,7 +7,6 @@ export const LogoutButton = () => {
 
   const handleLogout = async () => {
     const supabase = createClientComponentClient()
-    console.log(supabase);
     const { error } = await supabase.auth.signOut()
 
     if (!error) {
