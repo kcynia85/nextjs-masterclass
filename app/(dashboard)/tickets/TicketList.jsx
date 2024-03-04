@@ -15,15 +15,15 @@ const TicketList = async () => {
 
   return (
     <>
-      {tickets.map((ticket) => (
-        <div key={ticket.id} className="card my-5">
-          <h3>{ticket.title}</h3>
-          <p>{ticket.body.slice(0, 200)}...</p>
-          <Link href={`/tickets/${ticket.id}`}>
+      {tickets.map(({ id, title, body, priority }) => (
+        <div key={id} className="card my-5">
+          <h3>{title}</h3>
+          <p>{body.slice(0, 200)}...</p>
+          <Link href={`/tickets/${id}`}>
             <button className="btn-primary">View Ticket</button>
           </Link>
-          <div className={`pill ${ticket.priority}`}>
-            {ticket.priority} priority
+          <div className={`pill ${priority}`}>
+            {priority} priority
           </div>
         </div>
       ))}
