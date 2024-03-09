@@ -1,46 +1,48 @@
 import Link from 'next/link';
 import { notFound } from "next/navigation";
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from "next/headers";
+import DeleteButton from './DeleteButton';
 
 export const dynamicParams = true;
 
 export const generateMetadata = async ({params}) => {
-  const id = params.id;
+ const supabase = createServerComponentClient({ cookies });
 
-  const res = await fetch(`http://localhost:4000/tickets/${id}`);
-  const ticket = await res.json();
+ const { data: ticket } = await supabase
+ .from("tickets")
+ .select()
+ .eq("id", params.id)
+ .single();
 
-  return {
-    title: `Ticket ${ticket.title} | Serwer Expert HD`,
-  };
+ return {
+  title: `Serwis Expert  HD | ${ticket.title || "Ticket not found"}`
+ };
+
 };
 
-export const generateStaticParams = async () => {
-  const res = await fetch("http://localhost:4000/tickets");
-
-  const tickets = await res.json();
-
-  return tickets.map((ticket) => ({
-    id: ticket.id,
-  }));
-};
 
 const getTicket = async (id) => {
-  
-  const res = await fetch(`http://localhost:4000/tickets/${id}`, {
-    next: {
-      revalidate: 60 // use 0 to opt out of using cache
-    }
-  });
+  const supabase = createServerComponentClient({ cookies });
 
-  if (!res.ok) {
+  const { data } = await supabase
+  .from("tickets")
+  .select()
+  .eq("id", id)
+  .single()
+
+  if (!data) {
     notFound();
   }
 
-  return res.json();
+  return data
 }
 
-const TicketDeatils = async ({ params }) => {
+const TicketDetails = async ({ params }) => {
   const ticket = await getTicket(params.id);
+
+  const supabase = createServerComponentClient({ cookies });
+  const { data } = await supabase.auth.getSession();
   
   return (
     <>
@@ -48,9 +50,15 @@ const TicketDeatils = async ({ params }) => {
     <main>
       <nav>
         <h2>Ticket Details</h2>
+        <div className="ml-auto">
+          {data.session.user.email === ticket.user_email && (
+            <DeleteButton id={ticket.id} />
+          )}
+        </div>
       </nav>
       <div className="card">  
       <h3>{ticket.title}</h3>
+      <small>Created by {ticket.user_email} </small>
       <p>{ticket.body}</p>
       <div className={`pill ${ticket.priority}`}>
         {ticket.priority} priority
@@ -66,4 +74,4 @@ const TicketDeatils = async ({ params }) => {
   );
 };
 
-export default TicketDeatils;
+export default TicketDetails;
